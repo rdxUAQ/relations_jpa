@@ -1,5 +1,7 @@
 package com.sb.jparelations.relations_jpa;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -26,13 +28,13 @@ public class RelationsJpaApplication implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 
-		var result = manyToOne(5);
+		//var result = manyToOne(5);
 
-		System.out.println(result == true ? "Db initialited correctly":"DB INIT error");
+		//System.out.println(result == true ? "Db initialited correctly":"DB INIT error");
 		
-	}
+		createInvoicesToClient(1L);
 
-	
+	}
 
 	public Boolean manyToOne(Integer clients){
 
@@ -67,13 +69,30 @@ public class RelationsJpaApplication implements CommandLineRunner{
 
 				System.out.println("(=============Error saving client=============\n"+client.toString());
 				return false;
-			}
+			}	
+		}
+		return true;
+	}
 
-			
-			
+	public void createInvoicesToClient(Long id){
+
+		Optional<Client> oClient = _clientRepository.findById(id);
+
+		if(oClient.isPresent()){
+
+			System.out.println("=============Creating Invoices to an Existen Entity=============");
+			Client client = oClient.orElseThrow(null);
+
+			Invoice invoice = new Invoice("description"+(id+1), 1+1*100L);
+			invoice.setClient(client);
+			_invoiceRepository.save(invoice);
+
+			invoice = new Invoice("description"+(id+2), 1+2*100L);
+			invoice.setClient(client);
+			_invoiceRepository.save(invoice);
 		}
 
-		return true;
+
 	}
 
 }

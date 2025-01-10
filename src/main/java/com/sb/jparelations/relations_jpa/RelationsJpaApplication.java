@@ -58,7 +58,11 @@ public class RelationsJpaApplication implements CommandLineRunner{
 				System.out.println("addres created");
 				client.getAddresses().add(address);
 				_clientRepository.save(client);
-				address = new Address("street"+id+1, "colony"+id+1, id.intValue()+2);
+
+				address = new Address("street"+(id+1), "colony"+(id+1), id.intValue()+2);
+				client.getAddresses().add(address);
+				_clientRepository.save(client);
+
 				System.out.println("addres created");
 				System.out.println("=======================addres saved=======================");
 			}catch(Exception ex){

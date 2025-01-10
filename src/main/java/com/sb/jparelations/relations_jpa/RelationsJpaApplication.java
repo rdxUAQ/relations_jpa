@@ -1,5 +1,6 @@
 package com.sb.jparelations.relations_jpa;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,8 +60,9 @@ public class RelationsJpaApplication implements CommandLineRunner{
 				client.getAddresses().add(address);
 				_clientRepository.save(client);
 
-				address = new Address("street"+(id+1), "colony"+(id+1), id.intValue()+2);
-				client.getAddresses().add(address);
+				Address address1 = new Address("street"+(id+1), "colony"+(id+1), id.intValue()+2);
+
+				client.setAddresses(Arrays.asList(address, address1));
 				_clientRepository.save(client);
 
 				System.out.println("addres created");

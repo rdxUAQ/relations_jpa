@@ -4,6 +4,7 @@ import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,10 +22,11 @@ public class Client {
     private String name;
     private String lastName;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, 
+        orphanRemoval = true,
+        fetch = FetchType.EAGER)
     private List<Address> addresses;
    
-    
     public Client( String name, String lastName) {
         this.name = name;
         this.lastName = lastName;

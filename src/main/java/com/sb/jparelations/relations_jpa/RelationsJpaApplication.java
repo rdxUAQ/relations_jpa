@@ -8,6 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.sb.jparelations.relations_jpa.entities.Address;
 import com.sb.jparelations.relations_jpa.entities.Client;
 import com.sb.jparelations.relations_jpa.entities.Invoice;
 import com.sb.jparelations.relations_jpa.repositories.ClientRepository;
@@ -34,6 +35,38 @@ public class RelationsJpaApplication implements CommandLineRunner{
 		//System.out.println(result == true ? "Db initialited correctly":"DB INIT error");
 		
 		createInvoicesToClient(1L);
+
+		oneToMany(2L);
+
+	}
+
+	@Transactional
+	public void oneToMany(Long id){
+
+		Optional<Client> oClient = _clientRepository.findById(id);
+
+		if(oClient.isPresent()){
+
+			System.out.println("=============One To many client addresses=============");
+
+			Client client = oClient.orElseThrow(null);
+
+			
+
+			try{
+				Address address = new Address("street"+id, "colony"+id, id.intValue()+1);
+				System.out.println("addres created");
+				client.getAddresses().add(address);
+				_clientRepository.save(client);
+				address = new Address("street"+id+1, "colony"+id+1, id.intValue()+2);
+				System.out.println("addres created");
+				System.out.println("=======================addres saved=======================");
+			}catch(Exception ex){
+				System.out.println("=======================Exception saving address=======================");
+				System.out.println(ex);
+			}
+
+		}
 
 	}
 

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sb.jparelations.relations_jpa.entities.Client;
 import com.sb.jparelations.relations_jpa.entities.Invoice;
@@ -36,6 +37,8 @@ public class RelationsJpaApplication implements CommandLineRunner{
 
 	}
 
+
+	@Transactional
 	public Boolean manyToOne(Integer clients){
 
 		for(int i = 0; i < clients+1; i++){
@@ -74,6 +77,8 @@ public class RelationsJpaApplication implements CommandLineRunner{
 		return true;
 	}
 
+
+	@Transactional
 	public void createInvoicesToClient(Long id){
 
 		Optional<Client> oClient = _clientRepository.findById(id);

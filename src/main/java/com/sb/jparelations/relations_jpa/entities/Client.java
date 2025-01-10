@@ -2,6 +2,7 @@ package com.sb.jparelations.relations_jpa.entities;
 
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,8 +21,8 @@ public class Client {
     private String name;
     private String lastName;
 
-    @OneToMany
-    private List<Invoice> invoices;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Address> addresses;
    
     
     public Client( String name, String lastName) {
@@ -52,26 +53,22 @@ public class Client {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
     
+    public List<Address> getAddresses() {
+        return addresses;
+    }
+
+
+    public void setAddresses(List<Address> addresses) {
+        this.addresses = addresses;
+    }
 
 
     @Override
     public String toString() {
-        return "Client {id=" + id + ", name=" + name + ", lastName=" + lastName + "}";
+        return "Client [id=" + id + ", name=" + name + ", lastName=" + lastName + ", addresses=" + addresses + "]";
     }
 
-
-    public List<Invoice> getInvoices() {
-        return invoices;
-    }
-
-
-    public void setInvoices(List<Invoice> invoices) {
-        this.invoices = invoices;
-    }
-
-
-    
-    
 
 }

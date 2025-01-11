@@ -37,12 +37,39 @@ public class RelationsJpaApplication implements CommandLineRunner{
 		
 		createInvoicesToClient(1L);
 
-		oneToMany(2L);
+		oneToManyAddreses(2L);
+
+		removeAddress(2L);
 
 	}
 
+	
 	@Transactional
-	public void oneToMany(Long id){
+	public void removeAddress(Long id){
+
+		Optional<Client> oClient = _clientRepository.findById(id);
+
+		if(oClient.isPresent()){
+			Client client = oClient.orElseThrow();
+
+			Address address1 = new Address("street "+id+3,"colony"+id+3,id.intValue()+10);
+			client.getAddresses().add(address1);
+			
+			_clientRepository.save(client);
+
+			Optional<Client> oFindClient = _clientRepository.findById(id);
+
+			oFindClient.ifPresent(c->{
+				c.getAddresses().remove(address1);
+				_clientRepository.save(c);
+				System.out.println(c);
+			});
+
+		}
+	}
+
+	@Transactional
+	public void oneToManyAddreses(Long id){
 
 		Optional<Client> oClient = _clientRepository.findById(id);
 

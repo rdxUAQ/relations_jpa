@@ -1,6 +1,8 @@
 package com.sb.jparelations.relations_jpa;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -42,10 +44,51 @@ public class RelationsJpaApplication implements CommandLineRunner{
 
 		//removeAddress(2L);
 
-		removeAddressFindById();
+		//removeAddressFindById();
+
+		OneToManyBidirectional();
 
 	}
 
+	@Transactional
+	public void OneToManyBidirectional(){
+
+		Client client = new Client("cliente ", "bidirectional");
+
+		Invoice inv1 = new Invoice("compra bidirectional", 5625L);
+		Invoice inv2 = new Invoice("compra bidirectional 2", 987987L);
+
+		inv1.setClient(client);
+		inv2.setClient(client);
+
+		List<Invoice> invoices = new ArrayList<>();
+		invoices.add(inv1);
+		invoices.add(inv2);
+		client.setInvoices(invoices);
+
+		_clientRepository.save(client);
+
+		Optional<Client> result = _clientRepository.findById(client.getId());
+
+		
+
+		
+
+		try{
+		result.ifPresent(show -> {
+			System.out.println("=======================INFO=======================");
+			System.out.println(show.toString());
+		});
+
+		}catch(Exception ex){
+			System.out.println("=======================INFO=======================");
+			System.out.println(ex);
+		}
+
+	}
+
+
+	@Transactional
 	public void removeAddressFindById(){
 		Optional<Client> optionalC = _clientRepository.findById(2L);
 

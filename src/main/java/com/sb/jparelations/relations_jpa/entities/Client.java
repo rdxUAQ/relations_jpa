@@ -1,5 +1,6 @@
 package com.sb.jparelations.relations_jpa.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -37,6 +38,10 @@ public class Client {
     uniqueConstraints = @UniqueConstraint(columnNames = {"id_direcciones"}))
     private List<Address> addresses;
    
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "client")
+    private List<Invoice> invoices;
+
+
     public Client( String name, String lastName) {
         this.name = name;
         this.lastName = lastName;
@@ -44,6 +49,8 @@ public class Client {
 
     
     public Client() {
+        addresses = new ArrayList<>();
+        invoices = new ArrayList<>();
     }
 
 
@@ -77,10 +84,28 @@ public class Client {
     }
 
 
+    public List<Invoice> getInvoices() {
+        return invoices;
+    }
+
+
+    public void setInvoices(List<Invoice> invoices) {
+        this.invoices = invoices;
+    }
+    
+
     @Override
     public String toString() {
-        return "Client [id=" + id + ", name=" + name + ", lastName=" + lastName + ", addresses=" + addresses + "]";
+        return "Client [id=" + id 
+         + ", name=" + name 
+         + ", lastName=" + lastName
+         + ", addresses=" + addresses 
+         + ", invloices="+ invoices 
+         + "]";
     }
+
+
+   
 
 
 }

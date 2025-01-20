@@ -20,7 +20,7 @@ public class Invoice {
     private Long total;
     
     @ManyToOne
-    //@JoinColumn(name = "id_cliente")
+    @JoinColumn(name = "id_cliente")
     private Client client;
 
     public Invoice( String description, Long total) {
@@ -69,7 +69,6 @@ public class Invoice {
                 "id=" + id +
                 ", description=" + description +
                 ", total=" + total +
-                ", client="+ client +
                 '}';
 }
 

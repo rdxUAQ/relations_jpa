@@ -2,6 +2,7 @@ package com.sb.jparelations.relations_jpa;
 
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -35,35 +36,92 @@ public class RelationsJpaApplication implements CommandLineRunner{
 
 		//System.out.println(result == true ? "Db initialited correctly":"DB INIT error");
 		
-		createInvoicesToClient(1L);
+		//createInvoicesToClient(1L);
 
-		oneToManyAddreses(2L);
+		//oneToManyAddreses(2L);
 
-		removeAddress(2L);
+		//removeAddress(2L);
 
+		removeAddressFindById();
+
+	}
+
+	public void removeAddressFindById(){
+		Optional<Client> optionalC = _clientRepository.findById(2L);
+
+		optionalC.ifPresent(client -> 
+		{
+
+			Address add1= new Address("calle 2", "colonia 2", 33);
+			Address add2 = new Address("calle 3", "colonia 3", 35);
+
+			client.setAddresses(Arrays.asList(add1,add2));
+
+			_clientRepository.save(client);
+
+			System.out.println(client);
+
+
+			Optional<Client> optionalByOneClient = _clientRepository.findOne(2L); 
+			optionalByOneClient.ifPresent(c ->{
+
+				Address remAddress = c.getAddresses().stream().filter(add ->
+				add.getNumber().equals(add2.getNumber()) &&
+				add.getColony().equals(add2.getColony()) &&
+				add.getStreet_avenue().equals(add2.getStreet_avenue())).findFirst().orElse(null);
+
+				try{
+					c.getAddresses().remove(remAddress);
+					_clientRepository.save(c);
+					System.out.println(c);
+				}
+				catch(Exception ex){
+					System.out.println(ex);
+				}
+			});
+
+		});
 	}
 
 	
 	@Transactional
 	public void removeAddress(Long id){
 
+		Scanner scanner = new Scanner(System.in);
+
 		Optional<Client> oClient = _clientRepository.findById(id);
 
 		if(oClient.isPresent()){
 			Client client = oClient.orElseThrow();
+
+			System.out.println("=======================addres Saved=======================");
 
 			Address address1 = new Address("street "+id+3,"colony"+id+3,id.intValue()+10);
 			client.getAddresses().add(address1);
 			
 			_clientRepository.save(client);
 
+			
+
 			Optional<Client> oFindClient = _clientRepository.findById(id);
 
 			oFindClient.ifPresent(c->{
-				c.getAddresses().remove(address1);
+				Address removeAddress = c.getAddresses().stream().
+				filter(a -> 
+				a.getStreet_avenue().equals(address1.getStreet_avenue()) && 
+				a.getColony().equals(address1.getColony()) &&
+				a.getNumber().equals(address1.getNumber()))
+				.findFirst()
+				.orElse(null);
+				
+				System.out.println("=======================address Deleted=======================");
+				c.getAddresses().remove(removeAddress);
+				System.out.println(address1.toString());
 				_clientRepository.save(c);
 				System.out.println(c);
 			});
+
+			scanner.close();
 
 		}
 	}

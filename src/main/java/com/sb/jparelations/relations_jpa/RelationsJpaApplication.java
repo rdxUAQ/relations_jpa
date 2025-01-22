@@ -58,13 +58,9 @@ public class RelationsJpaApplication implements CommandLineRunner{
 		Invoice inv1 = new Invoice("compra bidirectional", 5625L);
 		Invoice inv2 = new Invoice("compra bidirectional 2", 987987L);
 
-		inv1.setClient(client);
-		inv2.setClient(client);
+		
 
-		List<Invoice> invoices = new ArrayList<>();
-		invoices.add(inv1);
-		invoices.add(inv2);
-		client.setInvoices(invoices);
+		client.addInvoice(inv1).addInvoice(inv2);
 
 		_clientRepository.save(client);
 

@@ -45,6 +45,9 @@ public class Client {
     public Client( String name, String lastName) {
         this.name = name;
         this.lastName = lastName;
+        this.addresses = new ArrayList<>();
+        this.invoices = new ArrayList<>();
+
     }
 
     
@@ -91,6 +94,13 @@ public class Client {
 
     public void setInvoices(List<Invoice> invoices) {
         this.invoices = invoices;
+    }
+
+    public Client addInvoice(Invoice invoice){
+
+        this.invoices.add(invoice);
+        invoice.setClient(this);
+        return this;
     }
     
 

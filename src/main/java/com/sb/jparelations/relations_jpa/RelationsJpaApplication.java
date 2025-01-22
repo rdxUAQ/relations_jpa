@@ -1,8 +1,6 @@
 package com.sb.jparelations.relations_jpa;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -46,19 +44,55 @@ public class RelationsJpaApplication implements CommandLineRunner{
 
 		//removeAddressFindById();
 
-		OneToManyBidirectional();
+		//OneToManyBidirectional();
+
+		OneToManyBidirectionalById(2L);
+
+	}
+
+	@Transactional
+	public void OneToManyBidirectionalById(Long id){
+
+		System.out.println("=======================OneToManyBidirectionalById=======================");
+
+		Optional<Client>  Oclient = _clientRepository.findById(id);
+
+		Oclient.ifPresent(client -> {
+
+			Invoice inv1 = new Invoice("compra bidirectional By id", 98132L);
+			Invoice inv2 = new Invoice("compra bidirectional By id2", 914632L);
+
+			client.addInvoice(inv1).addInvoice(inv2);
+
+			_clientRepository.save(client);
+
+			Optional<Client> result = _clientRepository.findOneWithInvoices(client.getId());
+
+
+			try{
+			result.ifPresent(show -> {
+				System.out.println("=======================INFO=======================");
+				System.out.println(show.toString());
+			});
+
+			}catch(Exception ex){
+				System.out.println("=======================INFO=======================");
+				System.out.println(ex);
+			}
+
+		});
 
 	}
 
 	@Transactional
 	public void OneToManyBidirectional(){
+		System.out.println("=======================OneToManyBidirectional=======================");
 
 		Client client = new Client("cliente ", "bidirectional");
 
 		Invoice inv1 = new Invoice("compra bidirectional", 5625L);
 		Invoice inv2 = new Invoice("compra bidirectional 2", 987987L);
 
-		
 
 		client.addInvoice(inv1).addInvoice(inv2);
 
@@ -66,9 +100,6 @@ public class RelationsJpaApplication implements CommandLineRunner{
 
 		Optional<Client> result = _clientRepository.findById(client.getId());
 
-		
-
-		
 
 		try{
 		result.ifPresent(show -> {
